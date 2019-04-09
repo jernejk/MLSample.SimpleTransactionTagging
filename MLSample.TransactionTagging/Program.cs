@@ -12,8 +12,8 @@ namespace MLSample.TransactionTagging
             // Some manually chosen 
             var trainingData = JsonConvert.DeserializeObject<List<TransactionData>>(File.ReadAllText("training.json"));
 
-            var trainingService = new BankTransactionTrainingService("Model.zip");
-            trainingService.Train(trainingData);
+            var trainingService = new BankTransactionTrainingService();
+            trainingService.Train(trainingData, "Model.zip");
 
             var labelService = new BankTransactionLabelService();
             labelService.LoadModel("Model.zip");
