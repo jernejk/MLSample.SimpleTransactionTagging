@@ -11,7 +11,7 @@ namespace MLSample.TransactionTagging
         {
             // Some manually chosen transactions with some modifications.
             Console.WriteLine("Loading training data...");
-            var trainingData = JsonConvert.DeserializeObject<List<TransactionData>>(File.ReadAllText("training.json"));
+            List<TransactionData> trainingData = GetTrainingData();
 
             Console.WriteLine("Training the model...");
             var trainingService = new BankTransactionTrainingService();
@@ -46,6 +46,11 @@ namespace MLSample.TransactionTagging
             });
 
             Console.WriteLine($"{description} ({transactionType}) => {prediction}");
+        }
+
+        private static List<TransactionData> GetTrainingData()
+        {
+            return JsonConvert.DeserializeObject<List<TransactionData>>(File.ReadAllText("training.json"));
         }
     }
 }
