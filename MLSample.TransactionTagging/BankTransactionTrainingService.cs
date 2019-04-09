@@ -11,7 +11,7 @@ namespace MLSample.TransactionTagging
         public void Train(IEnumerable<TransactionData> trainingData, string modelSavePath)
         {
             var mlContext = new MLContext(seed: 0);
-            var pipeline = LoadDataIntoPipeline(mlContext);
+            var pipeline = LoadDataPipeline(mlContext);
             var trainingPipeline = GetTrainingPipeline(mlContext, pipeline);
             var trainingModel = BuildAndTrainModel(mlContext, trainingPipeline, trainingData);
 
@@ -19,7 +19,7 @@ namespace MLSample.TransactionTagging
                 mlContext.Model.Save(trainingModel, fs);
         }
 
-        private IEstimator<ITransformer> LoadDataIntoPipeline(MLContext mlContext)
+        private IEstimator<ITransformer> LoadDataPipeline(MLContext mlContext)
         {
             // Configure data pipeline based on the features in TransactionData.
             // Description and TransactionType are the inputs and Category is the expected result.

@@ -22,7 +22,7 @@ namespace MLSample.TransactionTagging
             _predEngine = loadedModel.CreatePredictionEngine<TransactionData, TransactionPrediction>(_mlContext);
         }
 
-        public string PredictTag(TransactionData transaction)
+        public string PredictCategory(TransactionData transaction)
         {
             var prediction = new TransactionPrediction();
             _predEngine.Predict(transaction, ref prediction);

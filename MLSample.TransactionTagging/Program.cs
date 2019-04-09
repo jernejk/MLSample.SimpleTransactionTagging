@@ -39,7 +39,7 @@ namespace MLSample.TransactionTagging
 
         private static void MakePrediction(BankTransactionLabelService labelService, string description, string transactionType)
         {
-            string prediction = labelService.PredictTag(new TransactionData
+            string prediction = labelService.PredictCategory(new TransactionData
             {
                 Description = description,
                 TransactionType = transactionType
