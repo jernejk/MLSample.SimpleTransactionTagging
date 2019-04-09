@@ -9,18 +9,31 @@ namespace MLSample.TransactionTagging
     {
         public static void Main(string[] args)
         {
-            // Some manually chosen 
+            // Some manually chosen transactions with some modifications.
+            Console.WriteLine("Loading training data...");
             var trainingData = JsonConvert.DeserializeObject<List<TransactionData>>(File.ReadAllText("training.json"));
 
+            Console.WriteLine("Training the model...");
             var trainingService = new BankTransactionTrainingService();
             trainingService.Train(trainingData, "Model.zip");
 
+            Console.WriteLine("Prepare transaction labeler...");
             var labelService = new BankTransactionLabelService();
             labelService.LoadModel("Model.zip");
 
+            Console.WriteLine("Predict some transactions based on their description and type...");
+            Console.WriteLine();
+
+            // Should be "coffee & tea".
             MakePrediction(labelService, "AMERICAN CONCEPTS PT BRISBANE", "expense");
+
+            // The number in the transaction is always random but it will work despite that. Result: rent
             MakePrediction(labelService, "ANZ M-BANKING PAYMENT TRANSFER 513542 TO SPIRE REALITY", "expense");
+
+            // In fact, searching just for part of the transaction will give us the same result.
             MakePrediction(labelService, "SPIRE REALITY", "expense");
+
+            // If we change the transaction type, we'll get a reimbursement instead.
             MakePrediction(labelService, "SPIRE REALITY", "income");
         }
 
@@ -34,27 +47,5 @@ namespace MLSample.TransactionTagging
 
             Console.WriteLine($"{description} ({transactionType}) => {prediction}");
         }
-
-        //private static string UpdateDescription(string originalDescription)
-        //{
-        //    originalDescription = originalDescription
-        //        .Replace("POS AUTHORISATION ", string.Empty)
-        //        .Replace("VISA DEBIT PURCHASE CARD 0082 ", string.Empty)
-        //        .Replace("VISA DEBIT PURCHASE CARD 0068 ", string.Empty)
-        //        .Replace(" Card Used 9926", string.Empty)
-        //        .Replace(" Card Used 0082", string.Empty)
-        //        //.Replace("ANZ M-BANKING PAYMENT ", string.Empty)
-        //        .Replace("EFTPOS ", string.Empty)
-        //        .Replace("PAYPAL *", string.Empty);
-
-        //    if (originalDescription.EndsWith("AU"))
-        //    {
-        //        originalDescription = originalDescription
-        //            .Substring(0, originalDescription.LastIndexOf("AU"))
-        //            .Trim();
-        //    }
-
-        //    return originalDescription;
-        //}
     }
 }

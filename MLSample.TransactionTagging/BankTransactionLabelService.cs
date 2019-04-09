@@ -7,7 +7,6 @@ namespace MLSample.TransactionTagging
     public class BankTransactionLabelService
     {
         private readonly MLContext _mlContext;
-        private ITransformer _loadedModel;
         private PredictionEngine<TransactionData, TransactionPrediction> _predEngine;
 
         public BankTransactionLabelService()
@@ -17,26 +16,17 @@ namespace MLSample.TransactionTagging
 
         public void LoadModel(string modelPath)
         {
+            ITransformer loadedModel;
             using (var stream = new FileStream(modelPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                _loadedModel = _mlContext.Model.Load(stream);
-            }
-
-            _predEngine = _loadedModel.CreatePredictionEngine<TransactionData, TransactionPrediction>(_mlContext);
+                loadedModel = _mlContext.Model.Load(stream);
+            _predEngine = loadedModel.CreatePredictionEngine<TransactionData, TransactionPrediction>(_mlContext);
         }
 
         public string PredictTag(TransactionData transaction)
         {
             var prediction = new TransactionPrediction();
             _predEngine.Predict(transaction, ref prediction);
-
-            return prediction?.Area;
-        }
-
-        public class TransactionPrediction
-        {
-            [ColumnName("PredictedLabel")]
-            public string Area;
+            return prediction?.Category;
         }
     }
 }

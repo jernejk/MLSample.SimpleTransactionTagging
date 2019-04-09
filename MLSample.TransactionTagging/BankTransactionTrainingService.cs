@@ -21,12 +21,14 @@ namespace MLSample.TransactionTagging
 
         private IEstimator<ITransformer> LoadDataIntoPipeline(MLContext mlContext)
         {
-            // STEP 2: Common data process configuration with pipeline data transformations
-            var pipeline = mlContext.Transforms.Conversion.MapValueToKey(inputColumnName: nameof(TransactionData.Category), outputColumnName: "Label")
+            // Configure data pipeline based on the features in TransactionData.
+            // Description and TransactionType are the inputs and Category is the expected result.
+            var pipeline = mlContext
+                .Transforms.Conversion.MapValueToKey(inputColumnName: nameof(TransactionData.Category), outputColumnName: "Label")
                 .Append(mlContext.Transforms.Text.FeaturizeText(inputColumnName: nameof(TransactionData.Description), outputColumnName: "TitleFeaturized"))
                 .Append(mlContext.Transforms.Text.FeaturizeText(inputColumnName: nameof(TransactionData.TransactionType), outputColumnName: "DescriptionFeaturized"))
+                // Merge two features into a single feature.
                 .Append(mlContext.Transforms.Concatenate("Features", "TitleFeaturized", "DescriptionFeaturized"))
-                // Sample Caching the DataView so estimators iterating over the data multiple times, instead of always reading from file, using the cache might get better performance.
                 .AppendCacheCheckpoint(mlContext);
 
             return pipeline;
@@ -34,9 +36,8 @@ namespace MLSample.TransactionTagging
 
         private IEstimator<ITransformer> GetTrainingPipeline(MLContext mlContext, IEstimator<ITransformer> pipeline)
         {
-            // STEP 3: Create the training algorithm/trainer
             // Use the multi-class SDCA algorithm to predict the label using features.
-            // Set the trainer/algorithm and map label to value (original readable state)
+            // For StochasticDualCoordinateAscent the KeyToValue needs to be PredictedLabel.
             return pipeline
                 .Append(mlContext.MulticlassClassification.Trainers.StochasticDualCoordinateAscent(DefaultColumnNames.Label, DefaultColumnNames.Features))
                 .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
@@ -44,7 +45,7 @@ namespace MLSample.TransactionTagging
 
         private ITransformer BuildAndTrainModel(MLContext mlContext, IEstimator<ITransformer> trainingPipeline, IEnumerable<TransactionData> trainingData)
         {
-            //// We can now examine the records in the IDataView. We first create an enumerable of rows in the IDataView.
+            // Load training data and train the model based on training pipeline.
             var trainingDataView = mlContext.Data.LoadFromEnumerable(trainingData);
             return trainingPipeline.Fit(trainingDataView);
         }
