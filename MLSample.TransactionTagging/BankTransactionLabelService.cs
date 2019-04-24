@@ -1,5 +1,4 @@
 ﻿using Microsoft.ML;
-using Microsoft.ML.Data;
 using System.IO;
 
 namespace MLSample.TransactionTagging
@@ -18,8 +17,8 @@ namespace MLSample.TransactionTagging
         {
             ITransformer loadedModel;
             using (var stream = new FileStream(modelPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                loadedModel = _mlContext.Model.Load(stream);
-            _predEngine = loadedModel.CreatePredictionEngine<TransactionData, TransactionPrediction>(_mlContext);
+                loadedModel = _mlContext.Model.Load(stream, out var modelInputSchema);
+            _predEngine = _mlContext.Model.CreatePredictionEngine<TransactionData, TransactionPrediction>(loadedModel);
         }
 
         public string PredictCategory(TransactionData transaction)
