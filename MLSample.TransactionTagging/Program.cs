@@ -25,6 +25,9 @@ namespace MLSample.TransactionTagging
             Console.WriteLine();
 
             // Should be "coffee & tea".
+            MakePrediction(labelService, "VISA DEBIT PURCHASE CARD 0012 AMERICAN CONCEPTS PT BRISBANE", "expense");
+
+            // Should be "coffee & tea".
             MakePrediction(labelService, "AMERICAN CONCEPTS PT BRISBANE", "expense");
 
             // The number in the transaction is always random but it will work despite that. Result: rent
@@ -33,8 +36,14 @@ namespace MLSample.TransactionTagging
             // In fact, searching just for part of the transaction will give us the same result.
             MakePrediction(labelService, "SPIRE REALITY", "expense");
 
-            // If we change the transaction type, we'll get a reimbursement instead.
-            MakePrediction(labelService, "SPIRE REALITY", "income");
+            // Should be "investment".
+            MakePrediction(labelService, "VISA DEBIT PURCHASE CARD 0012 DOTNETFOUNDATION.ORG 42553885334 10.00 USD INC O/S FEE $0.42", "expense");
+
+            // Should be "investment".
+            MakePrediction(labelService, "VISA DEBIT PURCHASE CARD 0012 DOTNETFOUNDATION.ORG 334634543 10.00 USD INC O/S FEE $0.12", "expense");
+
+            // Will likely fail.
+            MakePrediction(labelService, "DOTNETFOUNDATION.ORG random text", "expense");
         }
 
         private static void MakePrediction(BankTransactionLabelService labelService, string description, string transactionType)
@@ -45,7 +54,8 @@ namespace MLSample.TransactionTagging
                 TransactionType = transactionType
             });
 
-            Console.WriteLine($"{description} ({transactionType}) => {prediction}");
+            //Console.WriteLine($"{description} ({transactionType}) => {prediction}");
+            Console.WriteLine($"{description}\n => {prediction}\n");
         }
 
         private static List<TransactionData> GetTrainingData()

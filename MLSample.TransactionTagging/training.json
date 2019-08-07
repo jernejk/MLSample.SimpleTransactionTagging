@@ -148,5 +148,35 @@
     "desc": "REIMBURSEMENT FROM SPIRE REALITY",
     "category": "reimbursement",
     "transactionType": "income"
+  },
+  {
+    "id": "12312412",
+    "desc": "DOTNETFOUNDATION.ORG 4255388953 10.00 USD INC O/S FEE $0.42",
+    "category": "investment",
+    "transactionType": "expense"
+  },
+  {
+    "id": "4323",
+    "desc": "DOTNETFOUNDATION.ORG 52434325324 10.00 USD INC O/S FEE $2.32",
+    "category": "investment",
+    "transactionType": "expense"
+  },
+  {
+    "id": "534643",
+    "desc": "DOTNETFOUNDATION.ORG 12313 10.00 USD INC O/S FEE $0.41",
+    "category": "investment",
+    "transactionType": "expense"
+  },
+  {
+    "id": "4565",
+    "desc": "DOTNETFOUNDATION.ORG 5465675632423 10.00 USD INC O/S FEE $0.98",
+    "category": "investment",
+    "transactionType": "expense"
+  },
+  {
+    "id": "45634",
+    "desc": "DOTNETFOUNDATION.ORG 32464 10.00 USD INC O/S FEE $0.64",
+    "category": "investment",
+    "transactionType": "expense"
   }
 ]
