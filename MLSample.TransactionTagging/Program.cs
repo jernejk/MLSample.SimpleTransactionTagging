@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace MLSample.TransactionTagging
@@ -15,7 +16,13 @@ namespace MLSample.TransactionTagging
 
             Console.WriteLine("Training the model...");
             var trainingService = new BankTransactionTrainingService();
+
+            var timer = Stopwatch.StartNew();
             trainingService.Train(trainingData, "Model.zip");
+            timer.Stop();
+
+            Console.WriteLine($"Training done in {Math.Round(timer.Elapsed.TotalSeconds, 2)} seconds");
+            Console.WriteLine();
 
             Console.WriteLine("Prepare transaction labeler...");
             var labelService = new BankTransactionLabelService();
@@ -54,7 +61,6 @@ namespace MLSample.TransactionTagging
                 TransactionType = transactionType
             });
 
-            //Console.WriteLine($"{description} ({transactionType}) => {prediction}");
             Console.WriteLine($"{description}\n => {prediction}\n");
         }
 
