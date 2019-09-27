@@ -1,20 +1,14 @@
 ﻿using System.Runtime.Serialization;
 
-namespace MLSample.TransactionTagging
+namespace MLSample.TransactionTagging.Core.Models
 {
     [DataContract]
-    public class TransactionData
+    public class Transaction
     {
-        [DataMember(Name = "id")]
-        public string ID { get; set; }
-
         [DataMember(Name = "desc")]
         public string Description { get; set; }
 
         [DataMember(Name = "category")]
         public string Category { get; set; }
-
-        [DataMember(Name = "transactionType")]
-        public string TransactionType { get; set; }
     }
 }
