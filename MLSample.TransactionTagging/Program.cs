@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace MLSample.TransactionTagging
 {
@@ -13,10 +14,12 @@ namespace MLSample.TransactionTagging
     {
         public static void Main(string[] args)
         {
+            bool doTraining = !args.Any(arg => arg.Equals("no-training", StringComparison.OrdinalIgnoreCase));
+            bool useAutoTrain = args.Any(arg => arg.Equals("auto-train", StringComparison.OrdinalIgnoreCase));
             var mlContex = new MLContext();
 
             // Training is optional as long it's done at least once.
-            if (args.Length == 0 || !args[0].Equals("no-training", StringComparison.OrdinalIgnoreCase))
+            if (doTraining)
             {
                 string trainingDataFile = Path.Combine(AppContext.BaseDirectory, "Data/training.json");
 
@@ -28,8 +31,17 @@ namespace MLSample.TransactionTagging
                 var trainingService = new BankTransactionTrainingService(mlContex);
 
                 var timer = Stopwatch.StartNew();
-                trainingService.ManualTrain(trainingData);
+                if (useAutoTrain)
+                {
+                    trainingService.AutoTrain(trainingData, 5);
+                }
+                else
+                {
+                    trainingService.ManualTrain(trainingData);
+                }
+
                 trainingService.SaveModel("Model.zip");
+
                 timer.Stop();
 
                 Console.WriteLine($"Training done in {Math.Round(timer.Elapsed.TotalSeconds, 2)} seconds");

@@ -8,10 +8,11 @@
 
 <EditForm Model="@transaction">
     <div>
+        <label>Bank transaction description:</label>
         <input type="text" @bind-value="@transaction.Description" style="min-width: 300px;" />
+        <button class="btn btn-primary" @onclick="Predict">Predict</button>
     </div>
 
-    <button class="btn btn-primary" @onclick="Predict">Predict</button>
 
     @if (prediction != null)
     {
@@ -51,7 +52,6 @@
     Transaction transaction = new Transaction
     {
         Description = "",
-        //TransactionType = "expense"
     };
 
     void Predict()
