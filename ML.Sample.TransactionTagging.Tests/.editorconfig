@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# S2699: Tests should include assertions. The project is using FluentAssertions which Roslyn analyzer don't pick up.
+dotnet_diagnostic.S2699.severity = none
