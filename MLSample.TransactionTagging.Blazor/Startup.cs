@@ -31,16 +31,26 @@ namespace MLSample.TransactionTagging.Blazor
 
             services.AddSingleton<MLContext>();
             services.AddTransient<BankTransactionTrainingService>();
-            services.AddSingleton<BankTransactionLabelService>(
-                ctx =>
+            services.AddSingleton<ITransformer>((ctx) =>
                 {
+                    // Based on https://devblogs.microsoft.com/cesardelatorre/how-to-optimize-and-run-ml-net-models-on-scalable-asp-net-core-webapis-or-web-apps/
                     // Load data and train model once per lifetime of the application.
+                    // MLContext and the ML Model should be singleton.
                     var mlContext = ctx.GetService<MLContext>();
                     var trainingService = new BankTransactionTrainingService(mlContext);
 
                     string path = Path.Combine(AppContext.BaseDirectory, "Data/training.json");
                     var data = JsonConvert.DeserializeObject<List<Transaction>>(File.ReadAllText(path));
                     var mlModel = trainingService.Train(data);
+
+                    return mlModel;
+                });
+            services.AddTransient<BankTransactionLabelService>(
+                ctx =>
+                {
+                    // Prediction engine in BankTransactionLabelService should be transient as it is not thread safe.
+                    var mlContext = ctx.GetService<MLContext>();
+                    var mlModel = ctx.GetService<ITransformer>();
 
                     var labelService = new BankTransactionLabelService(mlContext);
                     labelService.LoadModel(mlModel);
@@ -51,6 +61,7 @@ namespace MLSample.TransactionTagging.Blazor
                 ctx =>
                 {
                     // Load data and extract categories, so we can explain how certain ML was.
+                    // We only use it to have distinct categories from training data in exact order they appear.
                     var explainClassificationService = new ExplainClassificationService();
                     string path = Path.Combine(AppContext.BaseDirectory, "Data/training.json");
                     var data = JsonConvert.DeserializeObject<List<Transaction>>(File.ReadAllText(path));
