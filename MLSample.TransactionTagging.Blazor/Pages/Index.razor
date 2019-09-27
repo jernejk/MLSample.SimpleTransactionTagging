@@ -2,6 +2,7 @@
 @using MLSample.TransactionTagging.Core
 @using MLSample.TransactionTagging.Core.Models
 @inject BankTransactionLabelService labelService
+@inject ExplainClassificationService explainClassificationService
 
 <h1>Predict bank transaction category</h1>
 
@@ -12,19 +13,24 @@
 
     <button class="btn btn-primary" @onclick="Predict">Predict</button>
 
+    @if (prediction != null)
+    {
     <div style="margin-top: 20px;">
         <h4>Predictions</h4>
+
+        <p><b>@description</b> - @prediction.Category</p>
         <table>
+            @for (int i = 0; i < prediction.Score.Length; ++i)
+            {
+                var predictionScore = prediction.Score[i];
             <tr>
-                <th>Transaction description:</th>
-                <td>@description</td>
+                <th style="background-color: rgba(0, 255, 0, @predictionScore);">@categories[i]</th>
+                <td style="background-color: rgba(0, 255, 0, @predictionScore); padding-left: 20px;">@(Math.Round(predictionScore, 2) * 100) %</td>
             </tr>
-            <tr>
-                <th>Predicted category:</th>
-                <td>@prediction</td>
-            </tr>
+            }
         </table>
     </div>
+    }
 
     <div style="margin-top: 20px;">
         <h4>Examples of predictions</h4>
@@ -40,16 +46,22 @@
 
 @code {
     string description = "";
-    string prediction = "";
+    TransactionPrediction prediction = null;
+    List<string> categories = null;
     Transaction transaction = new Transaction
     {
-        Description = "DOTNETFOUNDATION.ORG",
+        Description = "",
         //TransactionType = "expense"
     };
 
     void Predict()
     {
         description = transaction.Description;
-        prediction = labelService.PredictCategory(transaction);
+        prediction = labelService.Predict(transaction);
+
+        if (categories == null)
+        {
+            categories = explainClassificationService.Categories.ToList();
+        }
     }
 }

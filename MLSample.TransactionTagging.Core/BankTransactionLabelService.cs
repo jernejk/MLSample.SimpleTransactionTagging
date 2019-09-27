@@ -32,9 +32,13 @@ namespace MLSample.TransactionTagging.Core
 
         public string PredictCategory(Transaction transaction)
         {
-            var prediction = new TransactionPrediction();
-            _predEngine.Predict(transaction, ref prediction);
+            var prediction = Predict(transaction);
             return prediction?.Category;
+        }
+
+        public TransactionPrediction Predict(Transaction transaction)
+        {
+            return _predEngine.Predict(transaction);
         }
     }
 }

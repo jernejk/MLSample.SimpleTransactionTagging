@@ -34,6 +34,7 @@ namespace MLSample.TransactionTagging.Blazor
             services.AddSingleton<BankTransactionLabelService>(
                 ctx =>
                 {
+                    // Load data and train model once per lifetime of the application.
                     var mlContext = ctx.GetService<MLContext>();
                     var trainingService = new BankTransactionTrainingService(mlContext);
 
@@ -45,6 +46,18 @@ namespace MLSample.TransactionTagging.Blazor
                     labelService.LoadModel(mlModel);
                     return labelService;
                 });
+
+            services.AddSingleton<ExplainClassificationService>(
+                ctx =>
+                {
+                    // Load data and extract categories, so we can explain how certain ML was.
+                    var explainClassificationService = new ExplainClassificationService();
+                    string path = Path.Combine(AppContext.BaseDirectory, "Data/training.json");
+                    var data = JsonConvert.DeserializeObject<List<Transaction>>(File.ReadAllText(path));
+                    explainClassificationService.LoadCategories(data);
+
+                    return explainClassificationService;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,7 +65,8 @@ namespace MLSample.TransactionTagging.Blazor
             IApplicationBuilder app,
             IWebHostEnvironment env,
             // We initialize it here, so that we can use as soon as the server is ready.
-            BankTransactionLabelService bankTransactionLabelService)
+            BankTransactionLabelService bankTransactionLabelService,
+            ExplainClassificationService explainClassificationService)
         {
             if (env.IsDevelopment())
             {

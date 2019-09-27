@@ -5,6 +5,8 @@ namespace MLSample.TransactionTagging.Core.Models
     public class TransactionPrediction
     {
         [ColumnName("PredictedLabel")]
-        public string Category;
+        public string Category { get; set; }
+
+        public float[] Score { get; set; }
     }
 }
