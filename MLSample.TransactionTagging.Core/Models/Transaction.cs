@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace MLSample.TransactionTagging
+namespace MLSample.TransactionTagging.Core.Models
 {
     [DataContract]
     public class Transaction

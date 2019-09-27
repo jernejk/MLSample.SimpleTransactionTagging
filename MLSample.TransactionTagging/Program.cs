@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.ML;
+using MLSample.TransactionTagging.Core;
+using MLSample.TransactionTagging.Core.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,12 +13,14 @@ namespace MLSample.TransactionTagging
     {
         public static void Main(string[] args)
         {
+            var mlContex = new MLContext();
+
             // Some manually chosen transactions with some modifications.
             Console.WriteLine("Loading training data...");
             List<Transaction> trainingData = GetTrainingData();
 
             Console.WriteLine("Training the model...");
-            var trainingService = new BankTransactionTrainingService();
+            var trainingService = new BankTransactionTrainingService(mlContex);
 
             var timer = Stopwatch.StartNew();
             trainingService.Train(trainingData, "Model.zip");
@@ -25,7 +30,7 @@ namespace MLSample.TransactionTagging
             Console.WriteLine();
 
             Console.WriteLine("Prepare transaction labeler...");
-            var labelService = new BankTransactionLabelService();
+            var labelService = new BankTransactionLabelService(mlContex);
             labelService.LoadModel("Model.zip");
 
             Console.WriteLine("Predict some transactions based on their description and type...");

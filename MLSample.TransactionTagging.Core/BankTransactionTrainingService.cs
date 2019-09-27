@@ -1,25 +1,31 @@
 ﻿using Microsoft.ML;
+using MLSample.TransactionTagging.Core.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MLSample.TransactionTagging
+namespace MLSample.TransactionTagging.Core
 {
     public class BankTransactionTrainingService
     {
+        private readonly MLContext _mlContext;
+
+        public BankTransactionTrainingService(MLContext mlContext)
+        {
+            _mlContext = mlContext;
+        }
+
         public void Train(IEnumerable<Transaction> trainingData, string modelSavePath)
         {
-            var mlContext = new MLContext(seed: 0);
-
             // Configure ML pipeline
-            var pipeline = LoadDataProcessPipeline(mlContext);
-            var trainingPipeline = GetTrainingPipeline(mlContext, pipeline);
-            var trainingDataView = mlContext.Data.LoadFromEnumerable(trainingData);
+            var pipeline = LoadDataProcessPipeline(_mlContext);
+            var trainingPipeline = GetTrainingPipeline(_mlContext, pipeline);
+            var trainingDataView = _mlContext.Data.LoadFromEnumerable(trainingData);
 
             // Generate training model.
             var trainingModel = trainingPipeline.Fit(trainingDataView);
 
             // Save training model to disk.
-            mlContext.Model.Save(trainingModel, trainingDataView.Schema, modelSavePath);
+            _mlContext.Model.Save(trainingModel, trainingDataView.Schema, modelSavePath);
         }
 
         private IEstimator<ITransformer> LoadDataProcessPipeline(MLContext mlContext)

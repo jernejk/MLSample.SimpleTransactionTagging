@@ -1,6 +1,6 @@
 ﻿using Microsoft.ML.Data;
 
-namespace MLSample.TransactionTagging
+namespace MLSample.TransactionTagging.Core.Models
 {
     public class TransactionPrediction
     {

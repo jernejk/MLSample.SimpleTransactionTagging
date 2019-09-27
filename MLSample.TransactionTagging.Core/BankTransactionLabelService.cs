@@ -1,16 +1,17 @@
 ﻿using Microsoft.ML;
+using MLSample.TransactionTagging.Core.Models;
 using System.IO;
 
-namespace MLSample.TransactionTagging
+namespace MLSample.TransactionTagging.Core
 {
     public class BankTransactionLabelService
     {
         private readonly MLContext _mlContext;
         private PredictionEngine<Transaction, TransactionPrediction> _predEngine;
 
-        public BankTransactionLabelService()
+        public BankTransactionLabelService(MLContext mlContext)
         {
-            _mlContext = new MLContext(seed: 0);
+            _mlContext = mlContext;
         }
 
         public void LoadModel(string modelPath)
