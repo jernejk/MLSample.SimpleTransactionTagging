@@ -3,7 +3,7 @@
 namespace MLSample.TransactionTagging
 {
     [DataContract]
-    public class TransactionData
+    public class Transaction
     {
         [DataMember(Name = "id")]
         public string ID { get; set; }

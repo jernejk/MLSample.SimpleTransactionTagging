@@ -12,7 +12,7 @@ namespace MLSample.TransactionTagging
         {
             // Some manually chosen transactions with some modifications.
             Console.WriteLine("Loading training data...");
-            List<TransactionData> trainingData = GetTrainingData();
+            List<Transaction> trainingData = GetTrainingData();
 
             Console.WriteLine("Training the model...");
             var trainingService = new BankTransactionTrainingService();
@@ -55,7 +55,7 @@ namespace MLSample.TransactionTagging
 
         private static void MakePrediction(BankTransactionLabelService labelService, string description, string transactionType)
         {
-            string prediction = labelService.PredictCategory(new TransactionData
+            string prediction = labelService.PredictCategory(new Transaction
             {
                 Description = description,
                 TransactionType = transactionType
@@ -64,9 +64,9 @@ namespace MLSample.TransactionTagging
             Console.WriteLine($"{description}\n => {prediction}\n");
         }
 
-        private static List<TransactionData> GetTrainingData()
+        private static List<Transaction> GetTrainingData()
         {
-            return JsonConvert.DeserializeObject<List<TransactionData>>(File.ReadAllText("training.json"));
+            return JsonConvert.DeserializeObject<List<Transaction>>(File.ReadAllText("Data/training.json"));
         }
     }
 }
