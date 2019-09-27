@@ -1,4 +1,5 @@
 ﻿using Microsoft.ML;
+using Microsoft.ML.AutoML;
 using MLSample.TransactionTagging.Core.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace MLSample.TransactionTagging.Core
             _mlContext = mlContext;
         }
 
-        public ITransformer Train(IEnumerable<Transaction> trainingData)
+        public ITransformer ManualTrain(IEnumerable<Transaction> trainingData)
         {
             // Configure ML pipeline
             var pipeline = LoadDataProcessPipeline(_mlContext);
@@ -27,6 +28,25 @@ namespace MLSample.TransactionTagging.Core
             _model = trainingPipeline.Fit(_trainingDataView);
 
             return _model;
+        }
+
+        public ITransformer AutoTrain(IEnumerable<Transaction> trainingData, uint maxTimeInSec)
+        {
+            _trainingDataView = _mlContext.Data.LoadFromEnumerable(trainingData);
+
+            var experimentSettings = new MulticlassExperimentSettings();
+            experimentSettings.MaxExperimentTimeInSeconds = maxTimeInSec;
+            experimentSettings.OptimizingMetric = MulticlassClassificationMetric.MacroAccuracy;
+
+            var experiment = _mlContext.Auto().CreateMulticlassClassificationExperiment(experimentSettings);
+            var columnInfo = new ColumnInformation
+            {
+                LabelColumnName = nameof(Transaction.Category)
+            };
+            columnInfo.TextColumnNames.Add(nameof(Transaction.Description));
+
+            var result = experiment.Execute(_trainingDataView, columnInfo);
+            return result.BestRun.Model;
         }
 
         public void SaveModel(string modelSavePath)

@@ -28,7 +28,7 @@ namespace MLSample.TransactionTagging
                 var trainingService = new BankTransactionTrainingService(mlContex);
 
                 var timer = Stopwatch.StartNew();
-                trainingService.Train(trainingData);
+                trainingService.ManualTrain(trainingData);
                 trainingService.SaveModel("Model.zip");
                 timer.Stop();
 
