@@ -18,9 +18,11 @@ namespace MLSample.TransactionTagging
             // Training is optional as long it's done at least once.
             if (args.Length == 0 || !args[0].Equals("no-training", StringComparison.OrdinalIgnoreCase))
             {
+                string trainingDataFile = Path.Combine(AppContext.BaseDirectory, "Data/training.json");
+
                 // Some manually chosen transactions with some modifications.
                 Console.WriteLine("Loading training data...");
-                List<Transaction> trainingData = GetTrainingData();
+                List<Transaction> trainingData = GetTrainingData(trainingDataFile);
 
                 Console.WriteLine("Training the model...");
                 var trainingService = new BankTransactionTrainingService(mlContex);
@@ -35,8 +37,9 @@ namespace MLSample.TransactionTagging
             }
 
             Console.WriteLine("Prepare transaction labeler...");
+            string modelFile = Path.Combine(AppContext.BaseDirectory, "Model.zip");
             var labelService = new BankTransactionLabelService(mlContex);
-            labelService.LoadModelFromFile("Model.zip");
+            labelService.LoadModelFromFile(modelFile);
 
             Console.WriteLine("Predict some transactions based on their description and type...");
             Console.WriteLine();
@@ -73,9 +76,9 @@ namespace MLSample.TransactionTagging
             Console.WriteLine($"{description}\n => {prediction}\n");
         }
 
-        private static List<Transaction> GetTrainingData()
+        private static List<Transaction> GetTrainingData(string trainingDataFile)
         {
-            return JsonConvert.DeserializeObject<List<Transaction>>(File.ReadAllText("Data/training.json"));
+            return JsonConvert.DeserializeObject<List<Transaction>>(File.ReadAllText(trainingDataFile));
         }
     }
 }
