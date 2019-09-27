@@ -1,182 +1,138 @@
 [
   {
-    "id": "176149454",
     "desc": "DMMP PTY LIMITED BRISBANE",
-    "category": "coffee & tea",
-    "transactionType": "expense"
+    "category": "coffee & tea"
   },
   {
-    "id": "166651877",
     "desc": "AMERICAN CONCEPTS PT BRISBANE",
-    "category": "coffee & tea",
-    "transactionType": "expense"
+    "category": "coffee & tea"
   },
   {
-    "id": "166651880",
     "desc": "IZOO EXPRESSO BRISBANE ADEL",
-    "category": "coffee & tea",
-    "transactionType": "expense"
+    "category": "coffee & tea"
   },
   {
-    "id": "175147802",
     "desc": "ANZ M-BANKING PAYMENT TRANSFER 628224 TO SPIRE REALITY",
-    "category": "rent",
-    "transactionType": "expense"
+    "category": "rent"
   },
   {
-    "id": "171296718",
     "desc": "O BRASILEIRO RESTAURAN BRISBANE CITY",
-    "category": "coffee & tea",
-    "transactionType": "expense"
+    "category": "coffee & tea"
   },
   {
-    "id": "174102052",
     "desc": "THE BAGEL BOYS PTY L BRISBANE",
-    "category": "coffee & tea",
-    "transactionType": "expense"
+    "category": "coffee & tea"
   },
   {
-    "id": "173833493",
     "desc": "ANZ M-BANKING PAYMENT TRANSFER 763489 TO SPIRE REALITY",
-    "category": "rent",
-    "transactionType": "expense"
+    "category": "rent"
   },
   {
-    "id": "172333960",
     "desc": "ANZ M-BANKING PAYMENT TRANSFER 668043 TO SPIRE REALITY",
-    "category": "rent",
-    "transactionType": "expense"
+    "category": "rent"
   },
   {
-    "id": "167719943",
     "desc": "IZOO EXPRESSO BRISBANE",
-    "category": "coffee & tea",
-    "transactionType": "expense"
+    "category": "coffee & tea"
   },
   {
-    "id": "168730674",
     "desc": "DASH JOLIMONT CANBERRA",
-    "category": "coffee & tea",
-    "transactionType": "expense"
+    "category": "coffee & tea"
   },
   {
-    "id": "168514953",
     "desc": "WOOLWORTHS 3909 MELBOURNE",
-    "category": "groceries",
-    "transactionType": "expense"
+    "category": "groceries"
   },
   {
-    "id": "167126692",
     "desc": "SOUL ORIGIN QUEENSPLAZ BRISBANE",
-    "category": "coffee & tea",
-    "transactionType": "expense"
+    "category": "coffee & tea"
   },
   {
-    "id": "167126690",
     "desc": "CAFE LAGOONAS ON THE SOUTH BRISBAN",
-    "category": "coffee & tea",
-    "transactionType": "expense"
+    "category": "coffee & tea"
   },
   {
-    "id": "166651994",
     "desc": "SENS COFFEE CO ADELA BRISBANE",
-    "category": "coffee & tea",
-    "transactionType": "expense"
+    "category": "coffee & tea"
   },
   {
-    "id": "166651936",
     "desc": "ANZ M-BANKING PAYMENT TRANSFER 492126 TO SPIRE REALITY",
-    "category": "rent",
-    "transactionType": "expense"
+    "category": "rent"
   },
   {
-    "id": "166651924",
     "desc": "ANZ M-BANKING PAYMENT TRANSFER 542432 TO SPIRE REALITY",
-    "category": "rent",
-    "transactionType": "expense"
+    "category": "rent"
   },
   {
-    "id": "166651965",
     "desc": "VANTO SYDNEY",
-    "category": "coffee & tea",
-    "transactionType": "expense"
+    "category": "coffee & tea"
   },
   {
-    "id": "166651839",
     "desc": "ANZ M-BANKING PAYMENT TRANSFER 244136 TO SPIRE REALITY",
-    "category": "rent",
-    "transactionType": "expense"
+    "category": "rent"
   },
   {
-    "id": "166651874",
     "desc": "STARBUCKS MYER CENTRE BRISBANE",
-    "category": "coffee & tea",
-    "transactionType": "expense"
+    "category": "coffee & tea"
   },
   {
-    "id": "166651822",
-    "desc": "ANZ M-BANKING PAYMENT TRANSFER 853518 TO SPIRE REALITY",
-    "category": "rent",
-    "transactionType": "expense"
+    "desc": "ANZ M-BANKING PAYMENT TRANSFER 953518 TO SPIRE REALITY",
+    "category": "rent"
   },
   {
-    "id": "166651785",
     "desc": "WOOLWORTHS 1415 NEWCASTLE WES",
-    "category": "groceries",
-    "transactionType": "expense"
+    "category": "groceries"
   },
   {
-    "id": "166651729",
-    "desc": "ANZ M-BANKING PAYMENT TRANSFER 546214 TO SPIRE REALITY",
-    "category": "rent",
-    "transactionType": "expense"
+    "desc": "ANZ M-BANKING PAYMENT TRANSFER 546414 TO SPIRE REALITY",
+    "category": "rent"
   },
   {
-    "id": "166651763",
     "desc": "DEVON CAFE NORTH SYDNE NORTH SYDNEY",
-    "category": "coffee & tea",
-    "transactionType": "expense"
+    "category": "coffee & tea"
   },
   {
-    "id": "166651924",
-    "desc": "PAY/SALARY FROM SSW FORTNIGHTLY SALARY",
-    "category": "salary",
-    "transactionType": "income"
-  },
-  {
-    "id": "166651936",
-    "desc": "REIMBURSEMENT FROM SPIRE REALITY",
-    "category": "reimbursement",
-    "transactionType": "income"
-  },
-  {
-    "id": "12312412",
     "desc": "DOTNETFOUNDATION.ORG 4255388953 10.00 USD INC O/S FEE $0.42",
-    "category": "investment",
-    "transactionType": "expense"
+    "category": "investment"
   },
   {
-    "id": "4323",
     "desc": "DOTNETFOUNDATION.ORG 52434325324 10.00 USD INC O/S FEE $2.32",
-    "category": "investment",
-    "transactionType": "expense"
+    "category": "investment"
   },
   {
-    "id": "534643",
     "desc": "DOTNETFOUNDATION.ORG 12313 10.00 USD INC O/S FEE $0.41",
-    "category": "investment",
-    "transactionType": "expense"
+    "category": "investment"
   },
   {
-    "id": "4565",
     "desc": "DOTNETFOUNDATION.ORG 5465675632423 10.00 USD INC O/S FEE $0.98",
-    "category": "investment",
-    "transactionType": "expense"
+    "category": "investment"
   },
   {
-    "id": "45634",
     "desc": "DOTNETFOUNDATION.ORG 32464 10.00 USD INC O/S FEE $0.64",
-    "category": "investment",
-    "transactionType": "expense"
+    "category": "investment"
+  },
+  {
+    "desc": "PAYPAL UBER AU 4029357733",
+    "category": "transport"
+  },
+  {
+    "desc": "THE HOYTS CORPORATIO STAFFORD",
+    "category": "entertainment"
+  },
+  {
+    "desc": "DBS Anytime Fitness",
+    "category": "health"
+  },
+  {
+    "desc": "EB PubConf Sydney 201 305-314-1520",
+    "category": "conference"
+  },
+  {
+    "desc": "ddd",
+    "category": "conference"
+  },
+  {
+    "desc": "conference",
+    "category": "conference"
   }
 ]

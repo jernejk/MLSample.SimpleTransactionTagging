@@ -8,24 +8,31 @@ namespace MLSample.TransactionTagging.Core
     public class BankTransactionTrainingService
     {
         private readonly MLContext _mlContext;
+        private ITransformer _model;
+        private IDataView _trainingDataView;
 
         public BankTransactionTrainingService(MLContext mlContext)
         {
             _mlContext = mlContext;
         }
 
-        public void Train(IEnumerable<Transaction> trainingData, string modelSavePath)
+        public ITransformer Train(IEnumerable<Transaction> trainingData)
         {
             // Configure ML pipeline
             var pipeline = LoadDataProcessPipeline(_mlContext);
             var trainingPipeline = GetTrainingPipeline(_mlContext, pipeline);
-            var trainingDataView = _mlContext.Data.LoadFromEnumerable(trainingData);
+            _trainingDataView = _mlContext.Data.LoadFromEnumerable(trainingData);
 
             // Generate training model.
-            var trainingModel = trainingPipeline.Fit(trainingDataView);
+            _model = trainingPipeline.Fit(_trainingDataView);
 
+            return _model;
+        }
+
+        public void SaveModel(string modelSavePath)
+        {
             // Save training model to disk.
-            _mlContext.Model.Save(trainingModel, trainingDataView.Schema, modelSavePath);
+            _mlContext.Model.Save(_model, _trainingDataView.Schema, modelSavePath);
         }
 
         private IEstimator<ITransformer> LoadDataProcessPipeline(MLContext mlContext)
@@ -34,10 +41,7 @@ namespace MLSample.TransactionTagging.Core
             // Description and TransactionType are the inputs and Category is the expected result.
             var dataProcessPipeline = mlContext
                 .Transforms.Conversion.MapValueToKey(inputColumnName: nameof(Transaction.Category), outputColumnName: "Label")
-                .Append(mlContext.Transforms.Text.FeaturizeText(inputColumnName: nameof(Transaction.Description), outputColumnName: "TitleFeaturized"))
-                .Append(mlContext.Transforms.Text.FeaturizeText(inputColumnName: nameof(Transaction.TransactionType), outputColumnName: "DescriptionFeaturized"))
-                // Merge two features into a single feature.
-                .Append(mlContext.Transforms.Concatenate("Features", "TitleFeaturized", "DescriptionFeaturized"))
+                .Append(mlContext.Transforms.Text.FeaturizeText(inputColumnName: nameof(Transaction.Description), outputColumnName: "Features"))
                 .AppendCacheCheckpoint(mlContext);
 
             return dataProcessPipeline;

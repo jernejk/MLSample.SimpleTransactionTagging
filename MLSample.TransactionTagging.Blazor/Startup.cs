@@ -1,15 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MLSample.TransactionTagging.Blazor.Data;
+using Microsoft.ML;
+using MLSample.TransactionTagging.Core;
+using MLSample.TransactionTagging.Core.Models;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace MLSample.TransactionTagging.Blazor
 {
@@ -28,11 +28,31 @@ namespace MLSample.TransactionTagging.Blazor
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+
+            services.AddSingleton<MLContext>();
+            services.AddTransient<BankTransactionTrainingService>();
+            services.AddSingleton<BankTransactionLabelService>(
+                ctx =>
+                {
+                    var mlContext = ctx.GetService<MLContext>();
+                    var trainingService = new BankTransactionTrainingService(mlContext);
+
+                    string path = Path.Combine(AppContext.BaseDirectory, "Data/training.json");
+                    var data = JsonConvert.DeserializeObject<List<Transaction>>(File.ReadAllText(path));
+                    var mlModel = trainingService.Train(data);
+
+                    var labelService = new BankTransactionLabelService(mlContext);
+                    labelService.LoadModel(mlModel);
+                    return labelService;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
+            // We initialize it here, so that we can use as soon as the server is ready.
+            BankTransactionLabelService bankTransactionLabelService)
         {
             if (env.IsDevelopment())
             {

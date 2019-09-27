@@ -14,12 +14,20 @@ namespace MLSample.TransactionTagging.Core
             _mlContext = mlContext;
         }
 
-        public void LoadModel(string modelPath)
+        public void LoadModelFromFile(string modelPath)
         {
+            // Load model from file.
             ITransformer loadedModel;
             using (var stream = new FileStream(modelPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 loadedModel = _mlContext.Model.Load(stream, out var modelInputSchema);
+
             _predEngine = _mlContext.Model.CreatePredictionEngine<Transaction, TransactionPrediction>(loadedModel);
+        }
+
+        public void LoadModel(ITransformer mlModel)
+        {
+            // Load already loaded model.
+            _predEngine = _mlContext.Model.CreatePredictionEngine<Transaction, TransactionPrediction>(mlModel);
         }
 
         public string PredictCategory(Transaction transaction)

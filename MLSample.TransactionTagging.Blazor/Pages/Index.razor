@@ -1,5 +1,55 @@
 ﻿@page "/"
+@using MLSample.TransactionTagging.Core
+@using MLSample.TransactionTagging.Core.Models
+@inject BankTransactionLabelService labelService
 
-<h1>Hello, world!</h1>
+<h1>Predict bank transaction category</h1>
 
-Welcome to your new app.
+<EditForm Model="@transaction">
+    <div>
+        <input type="text" @bind-value="@transaction.Description" style="min-width: 300px;" />
+    </div>
+
+    <button class="btn btn-primary" @onclick="Predict">Predict</button>
+
+    <div style="margin-top: 20px;">
+        <h4>Predictions</h4>
+        <table>
+            <tr>
+                <th>Transaction description:</th>
+                <td>@description</td>
+            </tr>
+            <tr>
+                <th>Predicted category:</th>
+                <td>@prediction</td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h4>Examples of predictions</h4>
+        <ul>
+            <li>DotNetFoundation.org - investment</li>
+            <li>Coffee - coffee & tea</li>
+            <li>Fitness - health</li>
+            <li>Uber - transport</li>
+            <li>PubConf - conference</li>
+        </ul>
+    </div>
+</EditForm>
+
+@code {
+    string description = "";
+    string prediction = "";
+    Transaction transaction = new Transaction
+    {
+        Description = "DOTNETFOUNDATION.ORG",
+        //TransactionType = "expense"
+    };
+
+    void Predict()
+    {
+        description = transaction.Description;
+        prediction = labelService.PredictCategory(transaction);
+    }
+}
