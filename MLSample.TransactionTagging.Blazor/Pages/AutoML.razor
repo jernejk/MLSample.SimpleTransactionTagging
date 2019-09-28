@@ -1,0 +1,107 @@
+﻿@page "/automl"
+@using MLSample.TransactionTagging.Core
+@using MLSample.TransactionTagging.Core.Models
+@inject BankTransactionLabelService labelService
+@inject BankTransactionTrainingService trainingService
+@inject ExplainClassificationService explainClassificationService
+
+<h1>Predict bank transaction category (AutoML)</h1>
+
+@if (training)
+{
+    <p>Training for @trainingTime seconds...</p>
+}
+else
+{
+    <h2>Train model</h2>
+    <EditForm Model="@trainingTime">
+        <div>
+            <label>Train for:</label>
+            <input type="number" min="0" @bind-value="@trainingTime" style="min-width: 300px;" />
+            <button class="btn btn-primary" @onclick="Train">Train</button>
+        </div>
+    </EditForm>
+
+    @if (isTrained)
+    {
+        <h2 style="margin-top: 20px;">Predict category</h2>
+        <EditForm Model="@transaction">
+            <div>
+                <label>Bank transaction description:</label>
+                <input type="text" @bind-value="@transaction.Description" style="min-width: 300px;" />
+                <button class="btn btn-primary" @onclick="Predict">Predict</button>
+            </div>
+
+            @if (prediction != null)
+            {
+                <div style="margin-top: 20px;">
+                    <h4>Predictions</h4>
+
+                    <p><b>@description</b> - @prediction.Category</p>
+                    <table>
+                        @for (int i = 0; i < prediction.Score.Length; ++i)
+                        {
+                            var predictionScore = prediction.Score[i];
+                            <tr>
+                                <th style="background-color: rgba(0, 255, 0, @predictionScore);">@categories[i]</th>
+                                <td style="background-color: rgba(0, 255, 0, @predictionScore); padding-left: 20px;">@(Math.Round(predictionScore, 2) * 100) %</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            }
+
+            <div style="margin-top: 20px;">
+                <h4>Examples of predictions</h4>
+                <ul>
+                    <li>DotNetFoundation.org - investment</li>
+                    <li>Coffee - coffee & tea</li>
+                    <li>Fitness - health</li>
+                    <li>Uber - transport</li>
+                    <li>PubConf - conference</li>
+                </ul>
+            </div>
+        </EditForm>
+    }
+}
+
+@functions  {
+    bool training = false;
+    bool isTrained = false;
+    uint trainingTime = 5;
+    string description = "";
+    TransactionPrediction prediction = null;
+    List<string> categories = null;
+    Transaction transaction = new Transaction
+    {
+        Description = "",
+    };
+
+    async Task Train()
+    {
+        training = true;
+
+        var model = await Task.Run(() =>
+        {
+            string path = System.IO.Path.Combine(AppContext.BaseDirectory, "Data/training.json");
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Transaction>>(System.IO.File.ReadAllText(path));
+            return trainingService.AutoTrain(data, trainingTime);
+        });
+
+        labelService.LoadModel(model);
+
+        training = false;
+        isTrained = true;
+    }
+
+    void Predict()
+    {
+        description = transaction.Description;
+        prediction = labelService.Predict(transaction);
+
+        if (categories == null)
+        {
+            categories = explainClassificationService.Categories.ToList();
+        }
+    }
+}

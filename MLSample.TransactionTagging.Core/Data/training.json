@@ -128,11 +128,35 @@
     "category": "conference"
   },
   {
-    "desc": "ddd",
+    "desc": "ddd Brisbane",
     "category": "conference"
   },
   {
     "desc": "conference",
+    "category": "conference"
+  },
+  {
+    "desc": "DBS Anytime Fitness Brisbane",
+    "category": "health"
+  },
+  {
+    "desc": "ddd Sydney",
+    "category": "conference"
+  },
+  {
+    "desc": "ddd Adelaide",
+    "category": "conference"
+  },
+  {
+    "desc": "ddd Melbourne",
+    "category": "conference"
+  },
+  {
+    "desc": "PAYPAL UBER AU 434574521",
+    "category": "transport"
+  },
+  {
+    "desc": "EB PubConf Sydney 201 365-354-6520",
     "category": "conference"
   }
 ]

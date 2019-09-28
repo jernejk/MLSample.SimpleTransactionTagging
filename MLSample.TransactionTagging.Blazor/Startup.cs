@@ -41,7 +41,7 @@ namespace MLSample.TransactionTagging.Blazor
 
                     string path = Path.Combine(AppContext.BaseDirectory, "Data/training.json");
                     var data = JsonConvert.DeserializeObject<List<Transaction>>(File.ReadAllText(path));
-                    var mlModel = trainingService.Train(data);
+                    var mlModel = trainingService.ManualTrain(data);
 
                     return mlModel;
                 });

@@ -20,7 +20,7 @@ namespace ML.Sample.TransactionTagging.Tests
 
             string trainingDataFile = Path.Combine(AppContext.BaseDirectory, "Data/training.json");
             var trainingData = JsonConvert.DeserializeObject<List<Transaction>>(File.ReadAllText(trainingDataFile));
-            var mlModel = trainingService.Train(trainingData);
+            var mlModel = trainingService.ManualTrain(trainingData);
 
             var labelService = new BankTransactionLabelService(mlContext);
             labelService.LoadModel(mlModel);
@@ -37,9 +37,8 @@ namespace ML.Sample.TransactionTagging.Tests
             string modelFile = Path.Combine(AppContext.BaseDirectory, $"{Guid.NewGuid()}.zip");
             string trainingDataFile = Path.Combine(AppContext.BaseDirectory, "Data/training.json");
             var trainingData = JsonConvert.DeserializeObject<List<Transaction>>(File.ReadAllText(trainingDataFile));
-            trainingService.Train(trainingData);
+            trainingService.ManualTrain(trainingData);
             trainingService.SaveModel(modelFile);
-
 
             var labelService = new BankTransactionLabelService(mlContext);
             labelService.LoadModelFromFile(modelFile);
@@ -49,13 +48,36 @@ namespace ML.Sample.TransactionTagging.Tests
             File.Delete(modelFile);
         }
 
+        [Fact]
+        public void TestAutoTrain()
+        {
+            var mlContext = new MLContext(0);
+            var trainingService = new BankTransactionTrainingService(mlContext);
+
+            string trainingDataFile = Path.Combine(AppContext.BaseDirectory, "Data/training.json");
+            var trainingData = JsonConvert.DeserializeObject<List<Transaction>>(File.ReadAllText(trainingDataFile));
+            var mlModel = trainingService.AutoTrain(trainingData, 5);
+
+            var labelService = new BankTransactionLabelService(mlContext);
+            labelService.LoadModel(mlModel);
+            
+            TestModel(labelService);
+        }
+
         private static void TestModel(BankTransactionLabelService labelService)
         {
+            // Exact matches from the training data.
+            labelService.PredictCategory(new Transaction("VISA DEBIT PURCHASE CARD 0012 AMERICAN CONCEPTS PT BRISBANE")).Should().Be("coffee & tea");
+            labelService.PredictCategory(new Transaction("VISA DEBIT PURCHASE CARD 0012 DOTNETFOUNDATION.ORG 42553885334 10.00 USD INC O/S FEE $0.42")).Should().Be("investment");
+
+            // Not exact matches, ML Model needs to be to do "Fuzzy" search on them.
             labelService.PredictCategory(new Transaction("coffee")).Should().Be("coffee & tea");
             labelService.PredictCategory(new Transaction("DotNetFoundation.org")).Should().Be("investment");
             labelService.PredictCategory(new Transaction("Fitness")).Should().Be("health");
             labelService.PredictCategory(new Transaction("Uber")).Should().Be("transport");
             labelService.PredictCategory(new Transaction("PubConf")).Should().Be("conference");
+            labelService.PredictCategory(new Transaction("DDD")).Should().Be("conference");
+            labelService.PredictCategory(new Transaction("DDD Perth")).Should().Be("conference");
         }
     }
 }
