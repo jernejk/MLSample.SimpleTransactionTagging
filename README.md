@@ -45,3 +45,21 @@ Most of the code is in the `Startup.cs` and `Pages/Index.razor`.
 
 There is also a integration test, that tests the most common uses cases in my demos.
 If they fail, it usually because my demo data has changed and confused ML.NET.
+
+## AutoML
+
+You can also try out AutoML, which will try to find the best trainer for the data.
+
+For console run:
+
+`dotnet run auto-ml`
+
+![Cmd Dotnet Run Auto Ml](assets/cmd-dotnet-run-auto-ml.png)
+**Figure: Running AutoML in console application.**
+
+For Blazor:
+
+Run the app, go to AutoML and click train. This will create a new model every time you train.
+
+![Automl Blazor Training](assets/automl-blazor-training.gif)
+**Figure: Running AutoML in Blazor application.**

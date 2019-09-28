@@ -15,7 +15,7 @@ namespace MLSample.TransactionTagging
         public static void Main(string[] args)
         {
             bool doTraining = !args.Any(arg => arg.Equals("no-training", StringComparison.OrdinalIgnoreCase));
-            bool useAutoTrain = args.Any(arg => arg.Equals("auto-train", StringComparison.OrdinalIgnoreCase));
+            bool useAutoTrain = args.Any(arg => arg.Equals("auto-ml", StringComparison.OrdinalIgnoreCase));
             var mlContex = new MLContext();
 
             // Training is optional as long it's done at least once.
