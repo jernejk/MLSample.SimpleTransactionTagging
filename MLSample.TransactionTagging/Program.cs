@@ -30,17 +30,18 @@ namespace MLSample.TransactionTagging
                 Console.WriteLine("Training the model...");
                 var trainingService = new BankTransactionTrainingService(mlContex);
 
+                ITransformer model;
                 var timer = Stopwatch.StartNew();
                 if (useAutoTrain)
                 {
-                    trainingService.AutoTrain(trainingData, 5);
+                    model = trainingService.AutoTrain(trainingData, 15);
                 }
                 else
                 {
-                    trainingService.ManualTrain(trainingData);
+                    model = trainingService.ManualTrain(trainingData);
                 }
 
-                trainingService.SaveModel("Model.zip");
+                trainingService.SaveModel("Model.zip", model);
 
                 timer.Stop();
 

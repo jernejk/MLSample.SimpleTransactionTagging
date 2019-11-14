@@ -9,7 +9,6 @@ namespace MLSample.TransactionTagging.Core
     public class BankTransactionTrainingService
     {
         private readonly MLContext _mlContext;
-        private ITransformer _model;
         private IDataView _trainingDataView;
 
         public BankTransactionTrainingService(MLContext mlContext)
@@ -25,9 +24,7 @@ namespace MLSample.TransactionTagging.Core
             _trainingDataView = _mlContext.Data.LoadFromEnumerable(trainingData);
 
             // Generate training model.
-            _model = trainingPipeline.Fit(_trainingDataView);
-
-            return _model;
+            return trainingPipeline.Fit(_trainingDataView);
         }
 
         public ITransformer AutoTrain(IEnumerable<Transaction> trainingData, uint maxTimeInSec)
@@ -49,10 +46,10 @@ namespace MLSample.TransactionTagging.Core
             return result.BestRun.Model;
         }
 
-        public void SaveModel(string modelSavePath)
+        public void SaveModel(string modelSavePath, ITransformer model)
         {
             // Save training model to disk.
-            _mlContext.Model.Save(_model, _trainingDataView.Schema, modelSavePath);
+            _mlContext.Model.Save(model, _trainingDataView.Schema, modelSavePath);
         }
 
         private IEstimator<ITransformer> LoadDataProcessPipeline(MLContext mlContext)
