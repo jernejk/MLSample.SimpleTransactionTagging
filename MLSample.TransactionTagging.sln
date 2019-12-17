@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLSample.TransactionTagging
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLSample.TransactionTagging.Blazor", "MLSample.TransactionTagging.Blazor\MLSample.TransactionTagging.Blazor.csproj", "{0FC1B018-CA98-4DBA-ADC1-499C863A09F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ML.Sample.TransactionTagging.Tests", "ML.Sample.TransactionTagging.Tests\ML.Sample.TransactionTagging.Tests.csproj", "{2BDB4164-2663-4D38-A993-400ED7594514}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ML.Sample.TransactionTagging.Tests", "ML.Sample.TransactionTagging.Tests\ML.Sample.TransactionTagging.Tests.csproj", "{2BDB4164-2663-4D38-A993-400ED7594514}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
