@@ -16,7 +16,7 @@ namespace MLSample.TransactionTagging
         {
             bool doTraining = !args.Any(arg => arg.Equals("no-training", StringComparison.OrdinalIgnoreCase));
             bool useAutoTrain = args.Any(arg => arg.Equals("auto-ml", StringComparison.OrdinalIgnoreCase));
-            var mlContex = new MLContext();
+            var mlContext = new MLContext();
 
             // Training is optional as long it's done at least once.
             if (doTraining)
@@ -25,21 +25,15 @@ namespace MLSample.TransactionTagging
 
                 // Some manually chosen transactions with some modifications.
                 Console.WriteLine("Loading training data...");
-                List<Transaction> trainingData = GetTrainingData(trainingDataFile);
+                IEnumerable<Transaction> trainingData = GetTrainingData(trainingDataFile);
 
                 Console.WriteLine("Training the model...");
-                var trainingService = new BankTransactionTrainingService(mlContex);
+                var trainingService = new BankTransactionTrainingService(mlContext);
 
-                ITransformer model;
                 var timer = Stopwatch.StartNew();
-                if (useAutoTrain)
-                {
-                    model = trainingService.AutoTrain(trainingData, 15);
-                }
-                else
-                {
-                    model = trainingService.ManualTrain(trainingData);
-                }
+                ITransformer model = useAutoTrain
+                    ? trainingService.AutoTrain(trainingData, 15)
+                    : trainingService.ManualTrain(trainingData);
 
                 trainingService.SaveModel("Model.zip", model);
 
@@ -51,7 +45,7 @@ namespace MLSample.TransactionTagging
 
             Console.WriteLine("Prepare transaction labeler...");
             string modelFile = Path.Combine(AppContext.BaseDirectory, "Model.zip");
-            var labelService = new BankTransactionLabelService(mlContex);
+            var labelService = new BankTransactionLabelService(mlContext);
             labelService.LoadModelFromFile(modelFile);
 
             Console.WriteLine("Predict some transactions based on their description and type...");
@@ -89,7 +83,7 @@ namespace MLSample.TransactionTagging
             Console.WriteLine($"{description}\n => {prediction}\n");
         }
 
-        private static List<Transaction> GetTrainingData(string trainingDataFile)
+        private static IEnumerable<Transaction> GetTrainingData(string trainingDataFile)
         {
             return JsonConvert.DeserializeObject<List<Transaction>>(File.ReadAllText(trainingDataFile));
         }
