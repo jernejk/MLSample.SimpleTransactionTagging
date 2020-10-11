@@ -62,13 +62,15 @@
     {
         Console.WriteLine("Loading model...");
 
-        var modelStream = await Http.GetStreamAsync("/Model.zip");
+        var modelStream = await Http.GetStreamAsync("Model.zip");
         labelService.LoadModelFromStream(modelStream);
 
         Console.WriteLine("Model loaded.");
 
         Console.WriteLine("Loading training data for classification explaination.");
-        var trainingData = await Http.GetFromJsonAsync<List<Transaction>>("/training.json");
+
+        // Get training data used in the Core library.
+        var trainingData = await Http.GetFromJsonAsync<List<Transaction>>("training.json");
         explainClassificationService.LoadCategories(trainingData);
         categories = explainClassificationService.Categories.ToList();
 
