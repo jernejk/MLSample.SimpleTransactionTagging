@@ -73,7 +73,7 @@
         Console.WriteLine("Loading training data for classification explaination.");
 
         // Get training data used in the Core library.
-        var trainingData = await Http.GetFromJsonAsync<List<Transaction>>(NavigationManager.BaseUri + "training.json");
+        var trainingData = await Http.GetFromJsonAsync<List<Transaction>>("training.json");
         explainClassificationService.LoadCategories(trainingData);
         categories = explainClassificationService.Categories.ToList();
 
