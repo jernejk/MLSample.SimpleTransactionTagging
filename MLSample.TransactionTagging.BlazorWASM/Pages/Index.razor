@@ -2,8 +2,9 @@
 @using MLSample.TransactionTagging.Core
 @using MLSample.TransactionTagging.Core.Models
 
-@inject BankTransactionLabelService labelService
 @inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject BankTransactionLabelService labelService
 @inject ExplainClassificationService explainClassificationService
 
 <h1>Predict bank transaction category</h1>
@@ -60,9 +61,11 @@
 
     protected async override Task OnInitializedAsync()
     {
+        Console.WriteLine("URI: " + NavigationManager.BaseUri);
+
         Console.WriteLine("Loading model...");
 
-        var modelStream = await Http.GetStreamAsync("Model.zip");
+        var modelStream = await Http.GetStreamAsync(NavigationManager.BaseUri + "Model.zip");
         labelService.LoadModelFromStream(modelStream);
 
         Console.WriteLine("Model loaded.");
@@ -70,7 +73,7 @@
         Console.WriteLine("Loading training data for classification explaination.");
 
         // Get training data used in the Core library.
-        var trainingData = await Http.GetFromJsonAsync<List<Transaction>>("training.json");
+        var trainingData = await Http.GetFromJsonAsync<List<Transaction>>(NavigationManager.BaseUri + "training.json");
         explainClassificationService.LoadCategories(trainingData);
         categories = explainClassificationService.Categories.ToList();
 
