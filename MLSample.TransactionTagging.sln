@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLSample.TransactionTagging
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ML.Sample.TransactionTagging.Tests", "ML.Sample.TransactionTagging.Tests\ML.Sample.TransactionTagging.Tests.csproj", "{2BDB4164-2663-4D38-A993-400ED7594514}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MLSample.TransactionTagging.BlazorWASM", "MLSample.TransactionTagging.BlazorWASM\MLSample.TransactionTagging.BlazorWASM.csproj", "{2EEA167B-5C52-4558-99C2-CFFCC5287362}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{2BDB4164-2663-4D38-A993-400ED7594514}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BDB4164-2663-4D38-A993-400ED7594514}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BDB4164-2663-4D38-A993-400ED7594514}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EEA167B-5C52-4558-99C2-CFFCC5287362}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EEA167B-5C52-4558-99C2-CFFCC5287362}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EEA167B-5C52-4558-99C2-CFFCC5287362}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EEA167B-5C52-4558-99C2-CFFCC5287362}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

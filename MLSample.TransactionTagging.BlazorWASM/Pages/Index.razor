@@ -1,0 +1,90 @@
+﻿@page "/"
+@using MLSample.TransactionTagging.Core
+@using MLSample.TransactionTagging.Core.Models
+
+@inject BankTransactionLabelService labelService
+@inject HttpClient Http
+@inject ExplainClassificationService explainClassificationService
+
+<h1>Predict bank transaction category</h1>
+
+<EditForm Model="@transaction">
+    <div>
+        <label>Bank transaction description:</label>
+        <input type="text" @bind-value="@transaction.Description" style="min-width: 300px;" />
+        <button class="btn btn-primary" @onclick="Predict">Predict</button>
+    </div>
+
+
+    @if (prediction != null)
+    {
+        <div style="margin-top: 20px;">
+            <h4>Predictions</h4>
+
+            <p><b>@description</b> - @prediction.Category (TODO: Support eplainability on Blazor WASM)</p>
+            <table>
+                @for (int i = 0; i < prediction.Score.Length; ++i)
+                {
+                    var predictionScore = prediction.Score[i];
+                    <tr>
+                        <th style="background-color: rgba(0, 255, 0, @predictionScore);">@categories[i]</th>
+                        <td style="background-color: rgba(0, 255, 0, @predictionScore); padding-left: 20px;">@Math.Round(predictionScore * 100, 0) %</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+
+    <div style="margin-top: 20px;">
+        <h4>Examples of predictions</h4>
+        <ul>
+            <li>DotNetFoundation.org - investment</li>
+            <li>Coffee - coffee & tea</li>
+            <li>Fitness - health</li>
+            <li>Uber - transport</li>
+            <li>PubConf - conference</li>
+        </ul>
+
+        <a href="~/training.json" target="_blank">Training data (trained in Console app)</a>
+    </div>
+</EditForm>
+
+@code {
+    string description = "";
+    TransactionPrediction prediction = null;
+    List<string> categories = null;
+    Transaction transaction = new Transaction
+    {
+        Description = "",
+    };
+
+    protected async override Task OnInitializedAsync()
+    {
+        Console.WriteLine("Loading model...");
+
+        var modelStream = await Http.GetStreamAsync("/Model.zip");
+        labelService.LoadModelFromStream(modelStream);
+
+        Console.WriteLine("Model loaded.");
+
+        Console.WriteLine("Loading training data for classification explaination.");
+        var trainingData = await Http.GetFromJsonAsync<List<Transaction>>("/training.json");
+        explainClassificationService.LoadCategories(trainingData);
+        categories = explainClassificationService.Categories.ToList();
+
+        await base.OnInitializedAsync();
+
+        Console.WriteLine("Everything ready.");
+    }
+
+    void Predict()
+    {
+        description = transaction.Description;
+        prediction = labelService.Predict(transaction);
+
+        if (categories == null)
+        {
+
+        }
+    }
+}

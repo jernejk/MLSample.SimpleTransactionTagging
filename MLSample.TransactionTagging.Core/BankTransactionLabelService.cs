@@ -24,6 +24,13 @@ namespace MLSample.TransactionTagging.Core
             _predEngine = _mlContext.Model.CreatePredictionEngine<Transaction, TransactionPrediction>(loadedModel);
         }
 
+        public void LoadModelFromStream(Stream modelStream)
+        {
+            // Load model from file.
+            ITransformer loadedModel = _mlContext.Model.Load(modelStream, out var modelInputSchema);
+            _predEngine = _mlContext.Model.CreatePredictionEngine<Transaction, TransactionPrediction>(loadedModel);
+        }
+
         public void LoadModel(ITransformer mlModel)
         {
             // Load already loaded model.
