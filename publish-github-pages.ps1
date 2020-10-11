@@ -11,8 +11,8 @@ Copy-Item -Path "./dist/wwwroot/*" -Destination "./" -Recurse -Force
 Write-Output ""
 
 $indexFile = "./index.html"
-$originalBaseUrlText = "<base href=""/"">";
-$targetBaseUrlText = "<base href=""/$repoName/"">";
+$originalBaseUrlText = "<base href=""/"" />";
+$targetBaseUrlText = "<base href=""/$repoName/"" />";
 
 Write-Output "----==== Replace base href in $indexFile to be /$repoName/"
 ((Get-Content -path $indexFile -Raw) -replace $originalBaseUrlText, $targetBaseUrlText) | Set-Content -Path $indexFile
