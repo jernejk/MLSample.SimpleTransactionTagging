@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ML" Version="1.5.2" />
-    <PackageReference Include="Microsoft.ML.AutoML" Version="0.17.2" />
+    <PackageReference Include="Microsoft.ML.AutoML" Version="0.17.4" />
   </ItemGroup>
 
 </Project>
