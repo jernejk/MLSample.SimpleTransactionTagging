@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Bogus" Version="33.1.1" />
+    <PackageReference Include="Microsoft.ML" Version="1.6.0" />
+    <PackageReference Include="Microsoft.ML.LightGbm" Version="1.6.0" />
+  </ItemGroup>
+  <ItemGroup Label="TransactionCategory">
+    <None Include="TransactionCategory.consumption.cs">
+      <DependentUpon>TransactionCategory.mbconfig</DependentUpon>
+    </None>
+    <None Include="TransactionCategory.training.cs">
+      <DependentUpon>TransactionCategory.mbconfig</DependentUpon>
+    </None>
+    <None Include="TransactionCategory.zip">
+      <DependentUpon>TransactionCategory.mbconfig</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
