@@ -3,6 +3,8 @@ This is an simple example of tagging bank transactions with ML.NET built for a c
 
 You can read more about this example and [ML.NET](https://dotnet.microsoft.com/apps/machinelearning-ai/ml-dotnet) on my blog post: [https://jkdev.me/simple-machine-learning-classification/](https://jkdev.me/simple-machine-learning-classification/?github)
 
+Live demo: https://jernejk.github.io/MLSample.SimpleTransactionTagging/
+
 ## Usage
 
 You can either run console application (.NET Core 2.2 at the time of writing) or Server-side Blazor (.NET Core 3.0) either via `dotnet run` or Visual Studio 2019.
