@@ -18,11 +18,7 @@ jobs:
     - name: Setup .NET Core (Blazor WASM)
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
-    - name: Setup .NET Core (others)
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.100
+        dotnet-version: 6.0.x
     - name: Test with dotnet
       run: dotnet test
     - name: Build with dotnet

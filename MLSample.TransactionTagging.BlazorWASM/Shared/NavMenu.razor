@@ -1,7 +1,7 @@
 ﻿<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">Blazor WASM ML.NET</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"> X </span>
     </button>
 </div>
 
@@ -16,12 +16,13 @@
 </div>
 
 @code {
-    private bool collapseNavMenu = true;
+    private bool collapseNavMenu = false;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
+        // TODO: Broken since .NET 5 upgrade.
         collapseNavMenu = !collapseNavMenu;
     }
 }

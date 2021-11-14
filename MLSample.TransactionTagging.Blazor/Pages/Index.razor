@@ -2,7 +2,6 @@
 @using MLSample.TransactionTagging.Core
 @using MLSample.TransactionTagging.Core.Models
 @inject BankTransactionLabelService labelService
-@inject ExplainClassificationService explainClassificationService
 
 <h1>Predict bank transaction category</h1>
 
@@ -61,7 +60,7 @@
 
         if (categories == null)
         {
-            categories = explainClassificationService.Categories.ToList();
+            categories = labelService.GetCategories();
         }
     }
 }
