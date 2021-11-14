@@ -24,7 +24,7 @@ namespace ML.Sample.TransactionTagging.Tests
             var mlModel = trainingService.ManualTrain(trainingData);
 
             var labelService = new BankTransactionLabelService(mlContext);
-            labelService.LoadModel(mlModel);
+            labelService.SetModel(mlModel);
 
             TestModel(labelService);
         }
@@ -61,7 +61,7 @@ namespace ML.Sample.TransactionTagging.Tests
             var mlModel = trainingService.AutoTrain(trainingData, 5);
 
             var labelService = new BankTransactionLabelService(mlContext);
-            labelService.LoadModel(mlModel);
+            labelService.SetModel(mlModel);
             
             TestModel(labelService);
         }

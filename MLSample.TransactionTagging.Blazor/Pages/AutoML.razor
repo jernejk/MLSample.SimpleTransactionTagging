@@ -1,9 +1,8 @@
 ﻿@page "/automl"
+@using Microsoft.ML
 @using MLSample.TransactionTagging.Core
 @using MLSample.TransactionTagging.Core.Models
-@inject BankTransactionLabelService labelService
 @inject BankTransactionTrainingService trainingService
-@inject ExplainClassificationService explainClassificationService
 
 <h1>Predict bank transaction category (AutoML)</h1>
 
@@ -77,6 +76,9 @@ else
         Description = "",
     };
 
+    // Create new label service independant from the DI label service.
+    BankTransactionLabelService labelService = new BankTransactionLabelService(new MLContext());
+
     async Task Train()
     {
         training = true;
@@ -88,7 +90,7 @@ else
             return trainingService.AutoTrain(data, trainingTime);
         });
 
-        labelService.LoadModel(model);
+        labelService.SetModel(model);
 
         training = false;
         isTrained = true;
@@ -101,7 +103,7 @@ else
 
         if (categories == null)
         {
-            categories = explainClassificationService.Categories.ToList();
+            categories = labelService.GetCategories();
         }
     }
 }

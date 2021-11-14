@@ -4,7 +4,6 @@
 
 @inject BankTransactionLabelService labelService
 @inject HttpClient Http
-@inject ExplainClassificationService explainClassificationService
 
 <h1>Predict bank transaction category</h1>
 
@@ -71,19 +70,9 @@
 
         Console.WriteLine("Model loaded.");
 
-        Console.WriteLine("Loading training data for classification explaination.");
+        Console.WriteLine("Loading training data for classification explaination...");
 
-        // Get training data used in the Core library.
-        //var trainingData = await Http.GetFromJsonAsync<List<Transaction>>("training.json");
-        //explainClassificationService.LoadCategories(trainingData);
-        //categories = explainClassificationService.Categories.ToList();
         categories = labelService.GetCategories();
-
-        Console.WriteLine("Categories");
-        foreach (var c in categories)
-        {
-            Console.WriteLine(c);
-        }
 
         await base.OnInitializedAsync();
 
@@ -94,10 +83,5 @@
     {
         description = transaction.Description;
         prediction = labelService.Predict(transaction);
-
-        if (categories == null)
-        {
-
-        }
     }
 }

@@ -1,13 +1,9 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.ML;
 using MLSample.TransactionTagging.Core;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MLSample.TransactionTagging.BlazorWASM
@@ -23,21 +19,13 @@ namespace MLSample.TransactionTagging.BlazorWASM
 
             builder.Services.AddSingleton<MLContext>();
             builder.Services.AddTransient<BankTransactionLabelService>(
-                ctx =>
-                {
+               ctx =>
+               {
                     // Prediction engine in BankTransactionLabelService should be transient as it is not thread safe.
+                    // Also, PredictionEnginePool doesn't seem to be supported in Blazor WASM atm.
                     var mlContext = ctx.GetService<MLContext>();
-                    return new BankTransactionLabelService(mlContext);
-                });
-
-            builder.Services.AddSingleton<ExplainClassificationService>(
-                ctx =>
-                {
-                    // Load data and extract categories, so we can explain how certain ML was.
-                    // We only use it to have distinct categories from training data in exact order they appear.
-                    var explainClassificationService = new ExplainClassificationService();
-                    return explainClassificationService;
-                });
+                   return new BankTransactionLabelService(mlContext);
+               });
 
             await builder.Build().RunAsync();
         }

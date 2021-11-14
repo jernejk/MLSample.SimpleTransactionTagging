@@ -1,51 +1,51 @@
-﻿using Microsoft.ML;
+﻿using Microsoft.Extensions.ML;
+using Microsoft.ML;
 using Microsoft.ML.Data;
 using MLSample.TransactionTagging.Core.Models;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace MLSample.TransactionTagging.Core
 {
     public class BankTransactionLabelService
     {
         private readonly MLContext _mlContext;
-        private PredictionEngine<Transaction, TransactionPrediction> _predEngine;
+        private readonly PredictionEnginePool<Transaction, TransactionPrediction> _predictionEnginePool;
+
+        private ITransformer _mlModel;
         private List<string> _categories;
 
         public BankTransactionLabelService(MLContext mlContext)
         {
+            // Use this when trying to load models manually.
             _mlContext = mlContext;
+        }
+
+        public BankTransactionLabelService(PredictionEnginePool<Transaction, TransactionPrediction> predictionEnginePool)
+        {
+            // Use this when using ML.NET in WebAPI, Azure Functions and other scalable applications.
+            _predictionEnginePool = predictionEnginePool;
         }
 
         public void LoadModelFromFile(string modelPath)
         {
-            _categories = null;
-
             // Load model from file.
-            ITransformer loadedModel;
             using (var stream = new FileStream(modelPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                loadedModel = _mlContext.Model.Load(stream, out var modelInputSchema);
-
-            _predEngine = _mlContext.Model.CreatePredictionEngine<Transaction, TransactionPrediction>(loadedModel);
+                SetModel(_mlContext.Model.Load(stream, out var _));
         }
 
         public void LoadModelFromStream(Stream modelStream)
         {
-            _categories = null;
-
             // Load model from file.
-            ITransformer loadedModel = _mlContext.Model.Load(modelStream, out var modelInputSchema);
-            _predEngine = _mlContext.Model.CreatePredictionEngine<Transaction, TransactionPrediction>(loadedModel);
+            SetModel(_mlContext.Model.Load(modelStream, out var _));
         }
 
-        public void LoadModel(ITransformer mlModel)
+        public void SetModel(ITransformer mlModel)
         {
             _categories = null;
-
-            // Load already loaded model.
-            _predEngine = _mlContext.Model.CreatePredictionEngine<Transaction, TransactionPrediction>(mlModel);
+            _mlModel = mlModel;
         }
 
         public string PredictCategory(Transaction transaction)
@@ -56,7 +56,15 @@ namespace MLSample.TransactionTagging.Core
 
         public TransactionPrediction Predict(Transaction transaction)
         {
-            return _predEngine.Predict(transaction);
+            if (_predictionEnginePool != null)
+            {
+                // Used for scalable applications.
+                return _predictionEnginePool.Predict(transaction);
+            }
+
+            // Used for console applications where multi-threading might not be a problem.
+            var predictionEngine = _mlContext.Model.CreatePredictionEngine<Transaction, TransactionPrediction>(_mlModel);
+            return predictionEngine.Predict(transaction);
         }
 
         public List<string> GetCategories()
@@ -67,7 +75,8 @@ namespace MLSample.TransactionTagging.Core
             }
 
             // Based on https://github.com/dotnet/docs/issues/14265
-            var column = _predEngine.OutputSchema.GetColumnOrNull("Score");
+            var schema = GetOutputSchema();
+            var column = schema.GetColumnOrNull("Score");
 
             var slotNames = new VBuffer<ReadOnlyMemory<char>>();
             column.Value.GetSlotNames(ref slotNames);
@@ -79,6 +88,15 @@ namespace MLSample.TransactionTagging.Core
                 .ToList();
 
             return _categories;
+        }
+
+        public DataViewSchema GetOutputSchema()
+        {
+            PredictionEngine<Transaction, TransactionPrediction> predEngine = _predictionEnginePool != null
+                ? _predictionEnginePool.GetPredictionEngine()
+                : _mlContext.Model.CreatePredictionEngine<Transaction, TransactionPrediction>(_mlModel);
+
+            return predEngine.OutputSchema;
         }
 
         public static Dictionary<string, float> GetScoresWithLabelsSorted(DataViewSchema schema, string name, float[] scores)
