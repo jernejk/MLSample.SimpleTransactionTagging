@@ -34,14 +34,12 @@ This is designed to be more interactive as well as you why ML.NET might have dec
 It uses dependency injection to train and load ML model, so it doesn't have to be reloaded every time we hit the page where we want to do classification.
 
 The DI is done based on a MS blog post: https://devblogs.microsoft.com/cesardelatorre/how-to-optimize-and-run-ml-net-models-on-scalable-asp-net-core-webapis-or-web-apps/
+**UPDATE:** Upgraded the code to `PredictionEnginePool`.
 
 Most of the code is in the `Startup.cs` and `Pages/Index.razor`.
 
 ![Blazor Uber Sample](assets/blazor-uber-sample.png)
 **Figure: Example of Blazor application.**
-
-
-**NOTE:** Client-side Blazor is currently not supported by ML.NET!
 
 ### Integration test
 
