@@ -13,6 +13,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ML.Sample.TransactionTaggin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLSample.TransactionTagging.BlazorWASM", "MLSample.TransactionTagging.BlazorWASM\MLSample.TransactionTagging.BlazorWASM.csproj", "{2EEA167B-5C52-4558-99C2-CFFCC5287362}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{85C39153-24DC-4498-AE4A-CD7D3E957F29}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		.github\workflows\aspnetcore.yml = .github\workflows\aspnetcore.yml
+		publish-github-pages.ps1 = publish-github-pages.ps1
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
