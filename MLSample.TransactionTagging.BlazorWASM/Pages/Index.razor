@@ -22,6 +22,9 @@
             <h4>Predictions</h4>
 
             <p><b>@description</b> - @prediction.Category</p>
+
+            @if (categories?.Any() == true && prediction.Score.Length <= categories.Count)
+            {
             <table>
                 @for (int i = 0; i < prediction.Score.Length; ++i)
                 {
@@ -32,6 +35,7 @@
                     </tr>
                 }
             </table>
+            }
         </div>
     }
 
@@ -70,9 +74,16 @@
         Console.WriteLine("Loading training data for classification explaination.");
 
         // Get training data used in the Core library.
-        var trainingData = await Http.GetFromJsonAsync<List<Transaction>>("training.json");
-        explainClassificationService.LoadCategories(trainingData);
-        categories = explainClassificationService.Categories.ToList();
+        //var trainingData = await Http.GetFromJsonAsync<List<Transaction>>("training.json");
+        //explainClassificationService.LoadCategories(trainingData);
+        //categories = explainClassificationService.Categories.ToList();
+        categories = labelService.GetCategories();
+
+        Console.WriteLine("Categories");
+        foreach (var c in categories)
+        {
+            Console.WriteLine(c);
+        }
 
         await base.OnInitializedAsync();
 
