@@ -15,7 +15,7 @@
         "ColumnDataFormat": "String",
         "IsCategorical": false,
         "Type": "Column",
-        "Version": 1
+        "Version": 2
       },
       {
         "ColumnName": "Category",
@@ -23,7 +23,7 @@
         "ColumnDataFormat": "String",
         "IsCategorical": false,
         "Type": "Column",
-        "Version": 1
+        "Version": 2
       }
     ]
   },
@@ -31,28 +31,6 @@
     "Type": "LocalCPU",
     "Version": 1
   },
-  "RunHistory": {
-    "Version": 0,
-    "Type": "Result",
-    "Trials": [
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "SdcaMaximumEntropyMulti",
-        "Score": 0.066896158608463985,
-        "RuntimeInSeconds": 1.2710000276565552
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "LightGbmMulti",
-        "Score": 1.0,
-        "RuntimeInSeconds": 0.72600001096725464
-      }
-    ],
-    "Pipeline": "[{\"EstimatorType\":\"FeaturizeText\",\"Inputs\":[\"Transaction Name\"],\"Outputs\":[\"Transaction Name\"]},{\"EstimatorType\":\"Concatenate\",\"Inputs\":[\"Transaction Name\"],\"Outputs\":[\"Features\"]},{\"EstimatorType\":\"MapValueToKey\",\"Inputs\":[\"Category\"],\"Outputs\":[\"Category\"]},{\"LabelColumnName\":\"Category\",\"FeatureColumnName\":\"Features\",\"NumberOfLeaves\":\"4\",\"MinimumExampleCountPerLeaf\":\"20\",\"LearningRate\":\"0.1\",\"NumberOfIterations\":\"4\",\"SubsampleFraction\":\"1\",\"FeatureFraction\":\"1\",\"L1Regularization\":\"2E-10\",\"L2Regularization\":\"0.999999999999999\",\"MaximumBinCountPerFeature\":\"256\",\"EstimatorType\":\"LightGbmMulti\",\"Inputs\":[\"Category\"],\"Outputs\":[\"Features\"]},{\"EstimatorType\":\"MapKeyToValue\",\"Inputs\":[\"PredictedLabel\"],\"Outputs\":[\"PredictedLabel\"]}]",
-    "MetricName": "MicroAccuracy"
-  },
   "Type": "TrainingConfig",
-  "Version": 1
+  "Version": 2
 }

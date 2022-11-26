@@ -1,12 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Bogus" Version="33.1.1" />
-    <PackageReference Include="Microsoft.ML" Version="1.6.0" />
-    <PackageReference Include="Microsoft.ML.LightGbm" Version="1.6.0" />
+    <PackageReference Include="Bogus" Version="34.0.2" />
+    <PackageReference Include="Microsoft.ML" Version="2.0.0" />
+    <PackageReference Include="Microsoft.ML.LightGbm" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup Label="TransactionCategory">
     <None Include="TransactionCategory.consumption.cs">
@@ -19,5 +20,9 @@
       <DependentUpon>TransactionCategory.mbconfig</DependentUpon>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Bogus" />
+    <Using Include="MLNetSydney.GenerateTransactions" />
   </ItemGroup>
 </Project>
